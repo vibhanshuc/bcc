@@ -1,0 +1,36 @@
+.table {
+  margin: 0 auto;
+}
+
+.table td {
+  border-bottom: 1px solid #d7d7d7;
+  border-collapse: collapse;
+}
+
+.table td,
+.table th {
+  padding: 10px 20px;
+  width: 180px;
+  text-align: center;
+}
+
+.table thead {
+  background-color: #d7d7d7;
+}
+
+.table__container {
+  display: block;
+  overflow: auto;
+  width: 100%;
+}
+
+.table--fixed-header thead tr {
+  display: block;
+  position: relative;
+}
+
+.table--fixed-header tbody {
+  display: block;
+  overflow: auto;
+  width: 100%;
+}

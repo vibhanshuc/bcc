@@ -1,0 +1,15 @@
+:root {
+    --grey-color: #d7d7d7;
+    font-size: 62.5%;
+    font-family: 'Roboto', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-size: 1.6rem;
+}
+
+* {
+    box-sizing: border-box;
+}

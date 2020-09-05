@@ -1,0 +1,21 @@
+{
+  "name": "bank-cotrol-center",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "start": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "keywords": [],
+  "author": "Vibhanhsu Chaturvedi <vibhanshu86@gmail.com> (https://vibhanshu.in)",
+  "license": "MIT",
+  "devDependencies": {
+    "css-loader": "^4.2.2",
+    "html-webpack-plugin": "^4.4.1",
+    "style-loader": "^1.2.1",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
