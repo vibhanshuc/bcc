@@ -1,10 +1,17 @@
 import Table from "../components/Table";
 import data from "../data";
-import './Home.css';
+import "./Home.css";
+import Toolbar from "../components/Toolbar";
 
 function HomeScreen() {
   const container = document.createElement("section");
   container.classList.add("home");
+  container.appendChild(
+    Toolbar({
+      title: "Employees",
+      buttonText: "Create Employee",
+    })
+  );
   const table = Table({
     columns: [
       {
@@ -20,7 +27,7 @@ function HomeScreen() {
       {
         label: "Full Name",
         isSearchable: true,
-        accessor: 'preferredFullName',
+        accessor: "preferredFullName",
       },
       {
         label: "Employee Code",
@@ -52,7 +59,7 @@ function HomeScreen() {
         accessor: "dob",
       },
       {
-        label: "",
+        label: "Actions",
         render(cellData) {
           const button = document.createElement("button");
           button.innerText = "...";
@@ -62,8 +69,9 @@ function HomeScreen() {
     ],
     data,
     config: {
-      fixed: true
-    }
+      perPage: 20,
+      fixed: true,
+    },
   });
   container.appendChild(table);
   return container;

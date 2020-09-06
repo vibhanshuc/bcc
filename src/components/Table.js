@@ -1,5 +1,6 @@
 import "./Table.css";
 import ComboBox from "./ComboBox";
+import Paginator from "./Paginator";
 
 function Table({ columns, data, config = {} }) {
   let searchText = "";
@@ -8,6 +9,9 @@ function Table({ columns, data, config = {} }) {
   let sortingColumn;
   let sortingOrder = "ASC";
   let searchOption;
+  let currentPage = 1;
+  const PER_PAGE = config.perPage || 5;
+  let totalPages = Math.ceil(data.length / PER_PAGE);
 
   if (searchOptions.length > 0) {
     searchOption = searchOptions[0].accessor;
@@ -19,15 +23,8 @@ function Table({ columns, data, config = {} }) {
   const table = document.createElement("table");
   table.classList.add("table");
 
-  tableContainer.appendChild(
-    ComboBox({
-      options: searchOptions.map((option) => ({
-        label: option.label,
-        value: option.accessor,
-      })),
-      onChange: handleSearch,
-    })
-  );
+  const actionBar = document.createElement("div");
+  actionBar.classList.add("table__action-bar");
 
   if (config.fixed) {
     table.classList.add("table--fixed-header");
@@ -49,21 +46,56 @@ function Table({ columns, data, config = {} }) {
     renderTable();
   }
 
+  function handlePagination(nextPage) {
+    currentPage = nextPage;
+    renderPaginator();
+    renderTable();
+  }
+
+  function createActionBar() {
+    actionBar.appendChild(
+      ComboBox({
+        options: searchOptions.map((option) => ({
+          label: option.label,
+          value: option.accessor,
+        })),
+        onChange: handleSearch,
+      })
+    );
+
+    renderPaginator();
+    return actionBar;
+  }
+
+  function renderPaginator() {
+    const paginator = Paginator({
+      currentPage,
+      totalPages,
+      onPageChange: handlePagination,
+    });
+    console.log({ paginator });
+    if (actionBar.childNodes[1]) {
+      actionBar.childNodes[1].replaceWith(paginator);
+    } else {
+      actionBar.appendChild(paginator);
+    }
+  }
+
   function createTableHead(table) {
     const tHead = table.createTHead();
     const tHeadRow = tHead.insertRow();
-    tHead.classList.add("table--fixed-header");
     columns.forEach(({ label, accessor, sortable }) => {
       const th = document.createElement("th");
       let text = document.createTextNode(label);
       th.appendChild(text);
       if (sortable) {
         const span = document.createElement("span");
-        span.innerHTML = sortingOrder === 'DSC' ? "<i>&darr;</i>" : "<i>&uarr;</i>";
+        span.innerHTML =
+          sortingOrder === "DSC" ? "<i>&darr;</i>" : "<i>&uarr;</i>";
         th.addEventListener("click", () => {
           handleSorting(accessor);
         });
-        th.style.cursor = 'pointer';
+        th.style.cursor = "pointer";
         th.appendChild(span);
       }
       tHeadRow.appendChild(th);
@@ -89,6 +121,13 @@ function Table({ columns, data, config = {} }) {
     tBody.style.height = `${window.innerHeight - 300}px`;
   }
 
+  function getPaginatedData(_data) {
+    const start = (currentPage - 1) * PER_PAGE;
+    const end = currentPage * PER_PAGE;
+    console.log({ currentPage, totalPages, start, end });
+    return _data.slice(start, end);
+  }
+
   function resolveData() {
     let _data = data;
     if (searchText && searchText.trim() !== "" && searchOption) {
@@ -107,21 +146,28 @@ function Table({ columns, data, config = {} }) {
         return a - b;
       });
 
-      if (sortingOrder === 'DSC') {
-        _data = _data.slice().reverse()
+      if (sortingOrder === "DSC") {
+        _data = _data.slice().reverse();
       }
+    }
 
+    if (currentPage) {
+      _data = getPaginatedData(_data);
     }
     return _data;
   }
 
   const renderTable = () => {
+    console.log({ sortingOrder, sortingColumn });
     table.innerHTML = "";
     createTableHead(table, columns);
     createTableBody(table, columns, resolveData());
     tableContainer.appendChild(table);
     return tableContainer;
   };
+
+  tableContainer.appendChild(createActionBar());
+
   return renderTable();
 }
 

@@ -7,7 +7,8 @@ function createHeader() {
   header.innerHTML = `
             <div class="header__title">ABC Bank</div>
             <div class="header__separator"></div>
-            <div class="header__sub-title">Bank Control Center</div>
+            <div class="header__sub-title">Bank Control Center</div></div>
+
         `;
 
   return header;

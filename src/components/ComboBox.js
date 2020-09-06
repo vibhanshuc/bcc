@@ -1,3 +1,5 @@
+import './Combobox.css';
+
 function ComboBox({ options, onChange }) {
   let text = "";
   let selectedOption = null;
@@ -35,7 +37,11 @@ function ComboBox({ options, onChange }) {
     container.appendChild(input);
 
     select.addEventListener("change", handleOptionChange);
-    input.addEventListener("keyup", handleTextChange);
+    input.addEventListener("change", handleTextChange);
+    input.setAttribute('placeholder', 'Press enter to search...')
+
+    input.classList.add('combo__input');
+    select.classList.add('combo__select');
 
     return container;
   }
