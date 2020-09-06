@@ -22,6 +22,7 @@ function ComboBox({ options, onChange }) {
     const container = document.createElement("div");
     const select = document.createElement("select");
     const input = document.createElement("input");
+    input.setAttribute('type', 'search');
 
     options.forEach((option) => {
       const optionEl = document.createElement("option");

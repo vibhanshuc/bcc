@@ -26,6 +26,8 @@ function HomeScreen() {
         label: "Employee Code",
         isSearchable: true,
         accessor: "employeeCode",
+
+        sortable: true,
       },
       {
         label: "Job Title",
@@ -33,6 +35,8 @@ function HomeScreen() {
       },
       {
         label: "Phone Number",
+        isSearchable: true,
+
         accessor: "phoneNumber",
       },
       {

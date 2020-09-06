@@ -5,13 +5,17 @@ function Table({ columns, data, config = {} }) {
   let searchText = "";
   const searchOptions = columns.filter((column) => column.isSearchable);
 
+  let sortingColumn;
+  let sortingOrder = "ASC";
   let searchOption;
 
   if (searchOptions.length > 0) {
     searchOption = searchOptions[0].accessor;
   }
+
   const tableContainer = document.createElement("div");
   tableContainer.classList.add("table__container");
+
   const table = document.createElement("table");
   table.classList.add("table");
 
@@ -37,8 +41,12 @@ function Table({ columns, data, config = {} }) {
     renderTable();
   }
 
-  function handleSorting(columnName, order) {
-    console.log(columnName)
+  function handleSorting(columnName) {
+    if (sortingColumn === columnName) {
+      sortingOrder = sortingOrder === "ASC" ? "DSC" : "ASC";
+    }
+    sortingColumn = columnName;
+    renderTable();
   }
 
   function createTableHead(table) {
@@ -51,12 +59,12 @@ function Table({ columns, data, config = {} }) {
       th.appendChild(text);
       if (sortable) {
         const span = document.createElement("span");
-        span.innerHTML = "<i>&#8593;</i>";
+        span.innerHTML = sortingOrder === 'DSC' ? "<i>&darr;</i>" : "<i>&uarr;</i>";
         th.addEventListener("click", () => {
-          handleSorting(accessor)
+          handleSorting(accessor);
         });
+        th.style.cursor = 'pointer';
         th.appendChild(span);
-        console.log(span, th, accessor);
       }
       tHeadRow.appendChild(th);
     });
@@ -84,7 +92,7 @@ function Table({ columns, data, config = {} }) {
   function resolveData() {
     let _data = data;
     if (searchText && searchText.trim() !== "" && searchOption) {
-      return _data.filter((item) => {
+      _data = _data.filter((item) => {
         return (
           item[searchOption]
             .toString()
@@ -92,6 +100,17 @@ function Table({ columns, data, config = {} }) {
             .indexOf(searchText.trim().toLowerCase()) !== -1
         );
       });
+    }
+
+    if (sortingColumn) {
+      _data = _data.sort((a, b) => {
+        return a - b;
+      });
+
+      if (sortingOrder === 'DSC') {
+        _data = _data.slice().reverse()
+      }
+
     }
     return _data;
   }

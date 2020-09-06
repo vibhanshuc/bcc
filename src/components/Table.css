@@ -22,6 +22,7 @@
   display: block;
   overflow: auto;
   width: 100%;
+  margin: 0 auto;
 }
 
 .table--fixed-header thead tr {
